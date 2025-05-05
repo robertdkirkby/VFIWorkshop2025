@@ -271,7 +271,10 @@ save tpath3B.mat -v7.3
 
 %% Now calculate some things about the transition path (path for Value fn, Policy fn, Agent Distribution)
 % You can calculate the value and policy functions for the transition path
-[RealizedVPath, RealizedPolicyPath, VPath, PolicyPath]=MultipleRevealValueFnOnTransPath_Case1_FHorz(PricePath, ParamPath, T, V_final, Policy_final, Parameters, n_d, n_a, n_z, N_j, d_grid, a_grid,z_grid, pi_z, DiscountFactorParamNames, ReturnFn, transpathoptions, vfoptions);
+[RealizedVPath, RealizedPolicyPath, VPath, PolicyPath]=MultipleRevealValueFnOnTransPath_Case1_FHorz(PricePath, ParamPath, T, Params, n_d, n_a, n_z, N_j, d_grid, a_grid,z_grid, pi_z, DiscountFactorParamNames, ReturnFn, transpathoptions, vfoptions_path, vfoptions_finaleqm);
+% Note: this includes calculating V_final and Policy_final based on
+% PricePath in the final period of each reveal being the prices for the
+% final stationary general eqm (for that reveal).
 
 % You can then use these to calculate the agent distribution for the transition path
 [RealizedAgentDistPath, AgentDistPath]=MultipleRevealAgentDistOnTransPath_Case1_FHorz(StationaryDist_init, jequaloneDist, PricePath, ParamPath, PolicyPath, AgeWeightParamNames,n_d,n_a,n_z,N_j,pi_z,T, Params, transpathoptions, simoptions);
@@ -280,30 +283,28 @@ save tpath3B.mat -v7.3
 % And then we can calculate AggVars for the path
 [RealizedAggVarsPath,AggVarsPath]=MultipleRevealEvalFnOnTransPath_AggVars_Case1_FHorz(FnsToEvaluate, AgentDistPath,PolicyPath, PricePath, ParamPath, Params, T, n_d, n_a, n_z, N_j, d_grid, a_grid,z_grid, transpathoptions, simoptions);
 
-%%
-save tpath3C.mat
-% load tpath3C.mat
-
 %% Plot some paths
 figure(1)
 % Plot of K and r
 % Note: include perios -3 to 0 (the initial stationary eqm) so can see any jump in period 1
 % Solid line for realized path, with dotted lines for the two reveals so
 % you can see how they combine to the final path
-subplot(2,1,1); plot(1:1:T+7,RealizedAggVarsPath.K.Mean)
+subplot(2,1,1); plot(1:1:T+7,RealizedAggVarsPath.K.Mean,'b-')
 hold on
 subplot(2,1,1); plot(1:1:T,AggVarsPath.t0001.K.Mean,'g.')
-subplot(2,1,1); plot(8:1:T+7,AggVarsPath.t0008.K.Mean,'y.')
+subplot(2,1,1); plot(8:1:T+7,AggVarsPath.t0008.K.Mean,'r.')
 plot(-3:1:0,AllStats_init.K.Mean*ones(1,4),'r')
 hold off
 xlim([-3,T])
-legend('Realised','reveal1','reveal2')
+legend('Realised','reveal1','reveal2','Location','southeast')
 title('Path of aggregate capital (K)')
-subplot(2,1,2); plot(1:1:T+7,RealizedPricePath.r)
+subplot(2,1,2); plot(1:1:T+7,RealizedPricePath.r,'b-')
 hold on
 subplot(2,1,2); plot(1:1:T,PricePath.t0001.r,'g.')
-subplot(2,1,2); plot(8:1:T+7,PricePath.t0008.r,'y.')
+subplot(2,1,2); plot(8:1:T+7,PricePath.t0008.r,'r.')
 plot(-3:1:0,p_eqm_init.r*ones(1,4),'r')
 hold off
 xlim([-3,T])
 title('Path of interest rate (r)')
+
+
