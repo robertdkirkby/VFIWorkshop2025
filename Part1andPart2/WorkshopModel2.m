@@ -47,7 +47,7 @@ Params.sj=[ones(1,46),linspace(1,0.99,81-46-10),linspace(0.99,0.9,9),0];
 
 %% Grids
 
-d_grid=linspace(0,1,n_d)'; % note, implicitly imposes the 0<h<1 constraint
+d_grid=linspace(0,1,n_d)'; % note, implicitly imposes the 0<=h<=1 constraint
 
 a_grid=10*linspace(0,1,n_a)'.^3; % Column vector of length n_a
 % ^3 will put more points near 0 than 1, model has more curvature here

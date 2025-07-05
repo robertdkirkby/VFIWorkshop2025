@@ -1,5 +1,5 @@
 function F=WorkshopModel1_ReturnFn(aprime,a,sigma,w,r,kappa_j,agej, Jr)
-% first three entries are the action space
+% first two entries are the action space
 
 F=-Inf;
 
@@ -13,4 +13,6 @@ end
 if c>0
     % utility fn
     F=(c^(1-sigma))/(1-sigma);
+end
+
 end

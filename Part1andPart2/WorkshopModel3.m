@@ -71,7 +71,7 @@ ReturnFn=@(h,aprime,a,z,sigma,psi,eta,w,r,kappa_j,agej, Jr)...
 % after this is interpreted as a parameter.
 
 %% Solve for value function and policy function
-vfoptions.divideandconquer=1; % exploits monotonicity
+vfoptions.divideandconquer=1;
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc

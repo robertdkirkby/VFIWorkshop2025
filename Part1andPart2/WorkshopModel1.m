@@ -79,7 +79,7 @@ jequaloneDist=zeros(n_a,1,'gpuArray'); % Put no households anywhere on grid
 jequaloneDist(1)=1; % start with 0 assets
 
 % Mass of agents of each age
-Params.mewj=ones(N_j,1)/N_j; % equal mass of each age (must some to one)
+Params.mewj=ones(N_j,1)/N_j; % equal mass of each age (must sum to one)
 AgeWeightsParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass of agents of each age
 % Note: should set mewj based on sj, but this is just a very simple example
 
