@@ -12,3 +12,6 @@ if c>0
     % utility fn
     F=(c^(1-sigma))/(1-sigma);
 end
+
+
+end

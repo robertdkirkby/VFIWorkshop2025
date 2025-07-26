@@ -69,7 +69,7 @@ vfoptions.experienceassetu=1; % Using an experience asset u
 
 % aprimeFn gives the value of hprime
 vfoptions.aprimeFn=@(l,h,u,alpha_h, delta_h, ability,lscaler) exp(u)*(ability*(h*(lscaler*(1-l))))^alpha_h+h*(1-delta_h);
-% The first inputs must be (d,a) [in the sense of aprime(d,a)], then any parameters
+% The first inputs must be (d,a,u) [in the sense of aprime(d,a,u)], then any parameters
 
 % We also need to tell simoptions about the experienceassetu
 simoptions.experienceassetu=1;

@@ -84,7 +84,7 @@ d_grid=[riskyshare_grid; assets_grid];
 a_grid=assets_grid;
 % Note: that d2 and a use same grid is not necessary
 
-%% experienceassetu: aprimeFn
+%% riskyasset: aprimeFn
 % To use an riskyasset, we need to define aprime(d,u)
 % [in notation of the current model, aprime(d1,d2,u)]
 

@@ -88,7 +88,7 @@ ReturnFn=@(h,aprime,a,z,sigma,psi,eta,w,r,kappa_j,agej, Jr)...
 
 %% Solve for value function and policy function
 tic;
-[V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
+[V, Policy,Vcontinuation]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc
 
 %% Agent distribution
