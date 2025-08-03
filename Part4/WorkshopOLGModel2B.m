@@ -1,17 +1,7 @@
-% Workshop OLG Model 2
+% Workshop OLG Model 2B
 
-% Add some government (pension plus an earnings tax; progressive income tax
-% plus trasfers) which involves two more general eqm eqns.
-% Also add a calibration target as a general eqm eqn (and give it a lower
-% weight than the other general eqm eqns).
-
-% We could/should use same 'trick' for w here as was used in previous model.
-% But I just use w directly, as it makes my formulas for 'earnings' and
-% 'income' much easier (in FnsToEvaluate). And solving the model is easy
-% enough anyway. Sometimes, the lazy options is the better option :)
-
-% Note: increased n_d and n_a as otherwise won't be able to hit the
-% General Eqm Eqns to the desired accuracy.
+% Just a copy-paste of Workshop OLG Model 2B, but now use 'intermediateEqn'
+% and adjust one of the GeneralEqmEqns. Skip to roughly line 117
 
 %% Model action and state-space
 n_d=51; % number of grid points for our decision variable, labor supply
@@ -98,6 +88,7 @@ tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc
 
+
 %% Agent distribution
 
 % Initial distribution of agents at birth (j=1)
@@ -109,7 +100,7 @@ Params.mewj=ones(N_j,1)/N_j; % equal mass of each age (must some to one)
 AgeWeightParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass of agents of each age
 % Note: should set mewj based on sj, but this is just a very simple example
 
-% Solve Stationart Distribution
+% Solve Stationary Distribution
 StationaryDist=StationaryDist_FHorz_Case1(jequaloneDist,AgeWeightParamNames,Policy,n_d,n_a,n_z,N_j,pi_z,Params,simoptions);
 
 %% Set up FnsToEvaluate
@@ -129,11 +120,15 @@ AggVars=EvalFnOnAgentDist_AggVars_FHorz_Case1(StationaryDist, Policy, FnsToEvalu
 GEPriceParamNames={'w','r','pension','G','beta'};
 % note, Params.r we set earlier was an inital guess (all these must already be in Params)
 
+heteroagentoptions.intermediateEqns.Y=@(K,L,alpha) (K^(alpha))*(L^(1-alpha));
+% intermediateEqn inputs must be either Params or AggVars (AggVars is like AllStats, but just the Mean)
+% the output of intermediateEqn can then be used as an input to GeneralEqmEqns
+
 GeneralEqmEqns.labormarket=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha));
 GeneralEqmEqns.capitalmarket=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta);
 GeneralEqmEqns.pensionbalance=@(earningstaxrevenue,pensionspending) earningstaxrevenue-pensionspending;
 GeneralEqmEqns.govbudgetbalance=@(G, incometaxrevenue) G-incometaxrevenue;
-GeneralEqmEqns.KdivYtarget=@(alpha,K,L,KdivYcalibtarget) K/((K^(alpha))*(L^(1-alpha)))-KdivYcalibtarget;
+GeneralEqmEqns.KdivYtarget=@(K,Y,KdivYcalibtarget) K/Y-KdivYcalibtarget; % Note: uses Y from intermediateEqn
 % GeneralEqmEqn inputs must be either Params or AggVars (AggVars is like AllStats, but just the Mean)
 % So here: r, alpha, delta will be taken from Params, and K,L will be taken from AggVars
 

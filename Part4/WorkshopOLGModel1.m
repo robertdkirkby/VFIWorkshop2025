@@ -73,7 +73,12 @@ ReturnFn=@(h,aprime,a,z,sigma,psi,eta,r,alpha,delta,kappa_j,agej, Jr)...
 % after this is interpreted as a parameter.
 
 %% Solve for value function and policy function
-vfoptions.divideandconquer=1; % Just using the defaults.
+vfoptions.divideandconquer=1; % Use divide-and-conquer to exploit conditional monotonicity
+vfoptions.gridinterplayer=1; % Use grid interpolation layer
+vfoptions.ngridinterp=10; % aprime includes 10 evenly spaced points between every pair of a_grid points
+simoptions.gridinterplayer=vfoptions.gridinterplayer; % tell simoptions about grid interpolation layer
+simoptions.ngridinterp=vfoptions.ngridinterp;
+
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc
@@ -90,7 +95,6 @@ AgeWeightParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass
 % Note: should set mewj based on sj, but this is just a very simple example
 
 % Solve Stationart Distribution
-simoptions=struct(); % Use the default options
 StationaryDist=StationaryDist_FHorz_Case1(jequaloneDist,AgeWeightParamNames,Policy,n_d,n_a,n_z,N_j,pi_z,Params,simoptions);
 
 %% MOST OF THE CODE BEFORE THIS IS UNCHANGED
