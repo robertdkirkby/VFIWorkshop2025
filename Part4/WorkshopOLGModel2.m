@@ -118,7 +118,7 @@ FnsToEvaluate.pensionspending=@(h,aprime,a,z,pension,agej,Jr) pension*(agej>=Jr)
 % after this is interpreted as a parameter.
 
 % Just make sure they are working okay
-AggVars=EvalFnOnAgentDist_AggVars_FHorz_Case1(StationaryDist, Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, N_j, d_grid, a_grid, z_grid,[],simoptions);
+AggVars=EvalFnOnAgentDist_AggVars_FHorz_Case1(StationaryDist, Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, N_j, d_grid, a_grid, z_grid,simoptions);
 
 
 %% General Eqm
@@ -142,7 +142,7 @@ GeneralEqmEqns.KdivYtarget=@(alpha,K,L,KdivYcalibtarget) K/((K^(alpha))*(L^(1-al
 %% Solve for stationary general eqm
 heteroagentoptions.multiGEweights=[1,1,1,1,0.5]; % Note: look at GeneralEqmEqns to see the order that these relate to
 heteroagentoptions.verbose=1; % just use defaults
-[p_eqm,~,GEcondns]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+[p_eqm,GEcondns]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % Done, the general eqm prices are in p_eqm
 % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 

@@ -123,7 +123,7 @@ heteroagentoptions.GEptype={'bequests'}; % solve the bequests GeneralEqmEqn cond
 
 %% Solve for stationary general eqm
 heteroagentoptions.verbose=1; % just use defaults
-[p_eqm,~,GEcondns]=HeteroAgentStationaryEqm_Case1_FHorz_PType(n_d, n_a, n_z, N_j, N_i,[], pi_z, d_grid, a_grid, z_grid, jequaloneDist,ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames, GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+[p_eqm,GEcondns]=HeteroAgentStationaryEqm_Case1_FHorz_PType(n_d, n_a, n_z, N_j, N_i,[], pi_z, d_grid, a_grid, z_grid, jequaloneDist,ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames, GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % Done, the general eqm prices are in p_eqm
 % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 fprintf('General eqm was found with r=%1.3f \n', p_eqm.r)
