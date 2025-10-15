@@ -107,7 +107,7 @@ FnsToEvaluate.taxrevenue=@(h,aprime,a,z,w,tau,kappa_j) tau*w*kappa_j*h*exp(z); %
 % after this is interpreted as a parameter.
 
 % Just make sure they are working okay
-AggVars=EvalFnOnAgentDist_AggVars_FHorz_Case1(StationaryDist, Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, N_j, d_grid, a_grid, z_grid,[],simoptions);
+AggVars=EvalFnOnAgentDist_AggVars_FHorz_Case1(StationaryDist, Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, N_j, d_grid, a_grid, z_grid,simoptions);
 
 % For analysing the model
 FnsToEvaluate2=FnsToEvaluate;
@@ -226,7 +226,7 @@ transpathoptions.GEnewprice3.howtoupdate=... % a row is: GEcondn, price, add, fa
 % Setup the options relating to the transition path
 transpathoptions.verbose=1;
 transpathoptions.maxiterations=200; % default is 1000
-transpathoptions.fastOLG=1;
+transpathoptions.fastOLG=1; % parallelize over j (faster but uses more memory)
 transpathoptions.graphpricepath=1; % plots of the ParamPath that get updated every interation
 % transpathoptions.graphaggvarspath=1; % plots of the AggVarsPath that get updated every iteration
 % And go!
