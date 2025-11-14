@@ -10,6 +10,10 @@
 % 'income' much easier (in FnsToEvaluate). And solving the model is easy
 % enough anyway. Sometimes, the lazy options is the better option :)
 
+% Sometimes we can use 'intermediateEqns' to make the general eqm eqns
+% easier to write. Here we calculate Y (output) as an intermediateEqn and
+% then use that as an input to a general eqm eqn.
+
 % Note: increased n_d and n_a as otherwise won't be able to hit the
 % General Eqm Eqns to the desired accuracy.
 
@@ -17,7 +21,7 @@
 n_d=51; % number of grid points for our decision variable, labor supply
 n_a=301; % number of grid points for our endogenous state, assets
 n_z=9; % number of grid points for our exogenous markov state, labor productivity (per time worked; roughly hourly labor productivity)
-N_j=81; % periods, represent ages 20 to 100% 
+N_j=81; % periods, represent ages 20 to 100
 
 %% Parameters
 
@@ -124,6 +128,17 @@ FnsToEvaluate.pensionspending=@(h,aprime,a,z,pension,agej,Jr) pension*(agej>=Jr)
 % Just make sure they are working okay
 AggVars=EvalFnOnAgentDist_AggVars_FHorz_Case1(StationaryDist, Policy, FnsToEvaluate, Params, [], n_d, n_a, n_z, N_j, d_grid, a_grid, z_grid,simoptions);
 
+%% Intermediate Equations
+% These just make some general equilbrium equations easier to write out.
+% Inputs: same as GeneralEqmEqns, the inputs must be either Params or AggVars
+% Output: can then be used as an input to GeneralEqmEqns
+heteroagentoptions.intermediateEqns.Y=@(alpha,K,L) (K^(alpha))*(L^(1-alpha));
+% Note: intermediateEqns do not add any functionality that is not already
+% available with GeneralEqmEqns, they just make writing the GeneralEqmEqns
+% much easier which can help make your code easier to read and make
+% mistakes less likely. The values of intermediateEqns are also reported
+% while finding the general eqm, which can make it easier to see what is
+% going on and to debug.
 
 %% General Eqm
 GEPriceParamNames={'w','r','pension','G','beta'};
@@ -133,9 +148,9 @@ GeneralEqmEqns.labormarket=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha));
 GeneralEqmEqns.capitalmarket=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta);
 GeneralEqmEqns.pensionbalance=@(earningstaxrevenue,pensionspending) earningstaxrevenue-pensionspending;
 GeneralEqmEqns.govbudgetbalance=@(G, incometaxrevenue) G-incometaxrevenue;
-GeneralEqmEqns.KdivYtarget=@(alpha,K,L,KdivYcalibtarget) K/((K^(alpha))*(L^(1-alpha)))-KdivYcalibtarget;
-% GeneralEqmEqn inputs must be either Params or AggVars (AggVars is like AllStats, but just the Mean)
-% So here: r, alpha, delta will be taken from Params, and K,L will be taken from AggVars
+GeneralEqmEqns.KdivYtarget=@(K,Y,KdivYcalibtarget) K/Y-KdivYcalibtarget;
+% GeneralEqmEqn inputs must be either Params or AggVars (or intermediateEqns now that we are using those) (AggVars is like AllStats, but just the Mean)
+% So here: r, alpha, delta will be taken from Params, and K,L will be taken from AggVars, Y is from intermediateEqns.
 
 % Note: there is no need to have GEPriceParamNames and GeneralEqmEqns
 % somehow 'in the same order' from the perspective of the codes. But I find 

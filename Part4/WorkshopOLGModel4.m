@@ -16,7 +16,7 @@
 n_d=21; % number of grid points for our decision variable, labor supply
 n_a=201; % number of grid points for our endogenous state, assets
 n_z=9; % number of grid points for our exogenous markov state, labor productivity (per time worked; roughly hourly labor productivity)
-N_j=81; % periods, represent ages 20 to 100% 
+N_j=81; % periods, represent ages 20 to 100
 
 %% Parameters
 
