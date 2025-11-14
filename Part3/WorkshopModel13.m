@@ -75,6 +75,7 @@ ReturnFn=@(aprime,hprime,a,h,z,w,r,p,kappa_j,pension,sigma, upsilon, theta, gamm
 
 %% Solve for value function and policy function
 vfoptions.divideandconquer=1; % use divide and conquer in the first of the two endogenous states
+% In practice, you would probably want to turn on vfoptions.gridinterplayer=1 here, but is off to keep things as simple as possible.
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc
