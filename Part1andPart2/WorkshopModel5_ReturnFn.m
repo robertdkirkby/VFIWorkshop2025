@@ -14,3 +14,6 @@ if c>0
     % utility fn
     F=(c^(1-sigma))/(1-sigma)-psi*(h^(1+eta))/(1+eta);
 end
+
+
+end

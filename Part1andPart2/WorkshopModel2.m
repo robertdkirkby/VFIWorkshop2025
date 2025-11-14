@@ -69,7 +69,8 @@ ReturnFn=@(h,aprime,a,sigma,psi,eta,w,r,kappa_j,agej, Jr)...
 % after this is interpreted as a parameter.
 
 %% Solve for value function and policy function
-vfoptions=struct(); % Just using the defaults.
+vfoptions=struct(); % Just using the defaults [this model is so simple, even turning on vfoptions.divideandconquer=1 is not worthwhile]
+% In practice, you would probably want to turn on vfoptions.gridinterplayer=1 here, but is off to keep things as simple as possible.
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc

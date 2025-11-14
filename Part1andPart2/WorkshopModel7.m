@@ -65,6 +65,7 @@ ReturnFn=@(h,aprime,a,z,sigma,psi,eta,w,r,kappa_j,agej, Jr)...
 
 %% Solve for value function and policy function
 vfoptions.divideandconquer=1; % exploits monotonicity
+% In practice, you would probably want to turn on vfoptions.gridinterplayer=1 here, but is off to keep things as simple as possible.
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc
@@ -117,7 +118,7 @@ title('Age-conditional Gini coeff of assets')
 %% Okay, now let's do so further analysis of this model
 
 %% We might want to get the values of the optimal policy (rather than the index, which is what Policy contains)
-PolicyVals=PolicyInd2Val_Case1_FHorz(Policy,n_d,n_a,n_z,N_j,d_grid,a_grid,simoptions);
+PolicyVals=PolicyInd2Val_Case1_FHorz(Policy,n_d,n_a,n_z,N_j,d_grid,a_grid,vfoptions);
 
 %% Simulate some panel data, and run a regression on the results
 % Note: simulated panels take longer runtime than StationaryDist, hence why we previously just use StationaryDist.
