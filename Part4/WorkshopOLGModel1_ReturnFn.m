@@ -3,7 +3,7 @@ function F=WorkshopOLGModel1_ReturnFn(h,aprime,a,z,sigma,psi,eta,r,alpha,delta,k
 
 F=-Inf;
 
-w=(1-alpha)*((r+delta)/alpha)^(alpha/(1-alpha));
+w=(1-alpha)*((r+delta)/alpha)^(alpha/(alpha-1));
 
 % budget constraint
 if agej<Jr % working
