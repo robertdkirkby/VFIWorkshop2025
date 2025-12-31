@@ -113,7 +113,7 @@ Params.mewj=ones(N_j,1)/N_j; % equal mass of each age (must some to one)
 AgeWeightParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass of agents of each age
 % Note: should set mewj based on sj, but this is just a very simple example
 
-% Solve Stationart Distribution
+% Solve Stationary Distribution
 StationaryDist=StationaryDist_FHorz_Case1(jequaloneDist,AgeWeightParamNames,Policy,n_d,n_a,n_z,N_j,pi_z,Params,simoptions);
 
 %% Set up FnsToEvaluate
