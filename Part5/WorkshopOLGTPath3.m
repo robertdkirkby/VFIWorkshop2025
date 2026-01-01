@@ -127,7 +127,7 @@ heteroagentoptions.verbose=1; % just use defaults
 %% Solve for initial stationary general eqm
 Params.tau=tau_initial; % initial tax rate
 
-[p_eqm_init,~,GEcondns_init]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+[p_eqm_init,GEcondns_init]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % Done, the general eqm prices are in p_eqm
 % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 
@@ -155,7 +155,7 @@ AgentDist_init=StationaryDist_init; % Just to emphasize that there is no need fo
 % %% Solve for final stationary general eqm
 % Params.tau=tau_final; % final tax rate
 % 
-% [p_eqm_final,~,GEcondns_final]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+% [p_eqm_final,GEcondns_final]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % % Done, the general eqm prices are in p_eqm
 % % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 % 

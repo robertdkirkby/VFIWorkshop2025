@@ -130,7 +130,7 @@ heteroagentoptions.verbose=1; % just use defaults
 %% Solve for initial stationary general eqm
 Params.tau=tau_initial; % initial tax rate
 
-[p_eqm_init,~,GEcondns_init]=HeteroAgentStationaryEqm_Case1_FHorz_PType(n_d, n_a, n_z, N_j,Names_i, [], pi_z, d_grid, a_grid, z_grid, jequaloneDist, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames, GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+[p_eqm_init, GEcondns_init]=HeteroAgentStationaryEqm_Case1_FHorz_PType(n_d, n_a, n_z, N_j,Names_i, [], pi_z, d_grid, a_grid, z_grid, jequaloneDist, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames, GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % Done, the general eqm prices are in p_eqm
 % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 
@@ -157,7 +157,7 @@ AgentDist_init=StationaryDist_init; % Just to emphasize that there is no need fo
 %% Solve for final stationary general eqm
 Params.tau=tau_final; % final tax rate
 
-[p_eqm_final,~,GEcondns_final]=HeteroAgentStationaryEqm_Case1_FHorz_PType(n_d, n_a, n_z, N_j,Names_i, [], pi_z, d_grid, a_grid, z_grid, jequaloneDist, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames, GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+[p_eqm_final, GEcondns_final]=HeteroAgentStationaryEqm_Case1_FHorz_PType(n_d, n_a, n_z, N_j,Names_i, [], pi_z, d_grid, a_grid, z_grid, jequaloneDist, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames, GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % Done, the general eqm prices are in p_eqm
 % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 
@@ -231,7 +231,7 @@ transpathoptions.fastOLG=1;
 transpathoptions.graphpricepath=1; % plots of the ParamPath that get updated every interation
 % transpathoptions.graphaggvarspath=1; % plots of the AggVarsPath that get updated every iteration
 % And go!
-PricePath=TransitionPath_Case1_FHorz_PType(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, Names_i,d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames ,transpathoptions, simoptions, vfoptions);
+[PricePath,GECondnsPath]=TransitionPath_Case1_FHorz_PType(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, Names_i,d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, PTypeDistParamNames ,transpathoptions, simoptions, vfoptions);
 
 %% Now calculate some things about the transition path (path for Value fn, Policy fn, Agent Distribution)
 % You can calculate the value and policy functions for the transition path

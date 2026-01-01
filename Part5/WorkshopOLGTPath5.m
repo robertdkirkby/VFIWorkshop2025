@@ -32,9 +32,9 @@ ParamPath.mewj=ParamPath.mewj./sum(ParamPath.mewj,2); % normalize age-masses to 
 % do this with the toolkit does not change.
 
 %% Model action and state-space
-n_d=51; % number of grid points for our decision variable, labor supply
-n_a=501; % number of grid points for our endogenous state, assets
-n_z=9; % number of grid points for our exogenous markov state, labor productivity (per time worked; roughly hourly labor productivity)
+n_d=11%51; % number of grid points for our decision variable, labor supply
+n_a=201%501; % number of grid points for our endogenous state, assets
+n_z=3% 9; % number of grid points for our exogenous markov state, labor productivity (per time worked; roughly hourly labor productivity)
 % N_j=81; % periods, represent ages 20 to 100% 
 
 %% Parameters
@@ -155,7 +155,7 @@ heteroagentoptions.verbose=1; % just use defaults
 Params.sj=ParamPath.sj(1,:);
 Params.mewj=ParamPath.mewj(1,:);
 
-[p_eqm_init,~,GEcondns_init]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+[p_eqm_init,GEcondns_init]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % Done, the general eqm prices are in p_eqm
 % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 
@@ -184,7 +184,7 @@ AgentDist_init=StationaryDist_init; % Just to emphasize that there is no need fo
 Params.sj=ParamPath.sj(T,:);
 Params.mewj=ParamPath.mewj(T,:);
 
-[p_eqm_final,~,GEcondns_final]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
+[p_eqm_final,GEcondns_final]=HeteroAgentStationaryEqm_Case1_FHorz(jequaloneDist,AgeWeightParamNames, n_d, n_a, n_z, N_j, [], pi_z, d_grid, a_grid, z_grid, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, [], [], [], GEPriceParamNames,heteroagentoptions, simoptions, vfoptions);
 % Done, the general eqm prices are in p_eqm
 % GEcondns tells us the values of the GeneralEqmEqns, should be near zero
 
@@ -261,7 +261,7 @@ transpathoptions.graphpricepath=1; % plots of the ParamPath that get updated eve
 transpathoptions.tolerance=4*10^(-4); % default is 10^(-4), which is a very demanding accuracy
 
 % And go!
-PricePath=TransitionPath_Case1_FHorz(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, transpathoptions, simoptions, vfoptions);
+[PricePath,GECondnsPath]=TransitionPath_Case1_FHorz(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, transpathoptions, simoptions, vfoptions);
 
 %% Now calculate some things about the transition path (path for Value fn, Policy fn, Agent Distribution)
 % You can calculate the value and policy functions for the transition path
