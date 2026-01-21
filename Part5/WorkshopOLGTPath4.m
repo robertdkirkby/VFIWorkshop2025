@@ -8,39 +8,9 @@
 tau_initial=0.1;
 tau_final=0.05;
 
-% NOTE: THIS IS NOT ACCURATE
-% I have deliberately left this with not enough points on the asset grid so
-% you can see what goes wrong and thus recognise how to deal with issues.
-% Specifically, with the current n_a=351 the code is not accurate enough
-% for the final stationart general eqm, you can see this looking at GEcondns_final
-% where you can see that some are still non-zero in the third decimal
-% place.
-% You can still run the  transition path code, and it still 'solves', but
-% if you look at the solution paths you can see a 'jump' in the final
-% period that is of the same magnitude as the errors in the final genearal
-% eqm (so roughly 10^-3). This happens because our initial guesses for
-% PricePath0 all have the final stationary eqm values in the final period,
-% and because VFI Toolkit never overwrites the period T of the price path
-% while solving transition. This is delibrate as this way as long as you do
-% use the final stationary eqm values for the last period of your initial
-% guess for price path, you will always get this visible jump in your
-% results if things are not working quite right.
-% This can all be easily solved, just set n_a=501 and everything is
-% accurate enough. I leave it here as an illustration of things to look for
-% and how to deal with them.
-% Actually, if you set n_a=501 on my laptop you get a 'Out of memory
-% on device' gpu error [it cannot create such a big matrix on the gpu]. You
-% can easily avoid this by setting transpathoptions.fastOLG=0, but of
-% course then the code takes much longer to run. On my desktop however I
-% have enough gpu memory and so don't get this error even with n_a=501.
-% This also hints at another useful trick, namely you can code on your
-% computer using small grids until you set everything up, then increase
-% grids and send of to a more powerful gpu (say on a server you have access
-% to).
-
 %% Model action and state-space
 n_d=51; % number of grid points for our decision variable, labor supply
-n_a=351; % number of grid points for our endogenous state, assets
+n_a=301; % number of grid points for our endogenous state, assets
 n_z=9; % number of grid points for our exogenous markov state, labor productivity (per time worked; roughly hourly labor productivity)
 N_j=81; % periods, represent ages 20 to 100% 
 
@@ -108,10 +78,17 @@ ReturnFn=@(h,aprime,a,z,sigma,psi,eta,r,w,tau,kappa_j,Beq,agej,Jr)...
 % after this is interpreted as a parameter.
 
 %% Solve for value function and policy function
-vfoptions.divideandconquer=1; % Just using the defaults.
+% Use both divide-and-conquer and grid interpolation layer
+vfoptions.divideandconquer=1;
+vfoptions.gridinterplayer=1;
+vfoptions.ngridinterp=20;
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc
+
+% When using grid interpolation layer, have to tell simoptions too
+simoptions.gridinterplayer=vfoptions.gridinterplayer;
+simoptions.ngridinterp=vfoptions.ngridinterp;
 
 %% Agent distribution
 
@@ -125,7 +102,6 @@ AgeWeightParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass
 % Note: should set mewj based on sj, but this is just a very simple example
 
 % Solve Stationart Distribution
-simoptions=struct(); % Use the default options
 StationaryDist=StationaryDist_FHorz_Case1(jequaloneDist,AgeWeightParamNames,Policy,n_d,n_a,n_z,N_j,pi_z,Params,simoptions);
 
 %% Set up FnsToEvaluate

@@ -101,10 +101,17 @@ ReturnFn=@(h,aprime,a,z,sigma,psi,eta,r,w,tau,kappa_j,Beq,agej,Jr)...
 % after this is interpreted as a parameter.
 
 %% Solve for value function and policy function
-vfoptions.divideandconquer=1; % Just using the defaults.
+% Use both divide-and-conquer and grid interpolation layer
+vfoptions.divideandconquer=1;
+vfoptions.gridinterplayer=1;
+vfoptions.ngridinterp=20;
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz(n_d,n_a,n_z,N_j, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, [], vfoptions);
 toc
+
+% When using grid interpolation layer, have to tell simoptions too
+simoptions.gridinterplayer=vfoptions.gridinterplayer;
+simoptions.ngridinterp=vfoptions.ngridinterp;
 
 %% Agent distribution
 
@@ -117,8 +124,7 @@ Params.mewj=ParamPath.mewj(1,:);
 AgeWeightParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass of agents of each age
 % Note: should set mewj based on sj, but this is just a very simple example
 
-% Solve Stationart Distribution
-simoptions=struct(); % Use the default options
+% Solve Stationary Distribution
 StationaryDist=StationaryDist_FHorz_Case1(jequaloneDist,AgeWeightParamNames,Policy,n_d,n_a,n_z,N_j,pi_z,Params,simoptions);
 
 %% Set up FnsToEvaluate

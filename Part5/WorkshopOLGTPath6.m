@@ -9,7 +9,7 @@ tau_final=0.05;
 
 %% Model action and state-space
 n_d=51; % number of grid points for our decision variable, labor supply
-n_a=351; % number of grid points for our endogenous state, assets
+n_a=301; % number of grid points for our endogenous state, assets
 n_z=9; % number of grid points for our exogenous markov state, labor productivity (per time worked; roughly hourly labor productivity)
 N_j=81; % periods, represent ages 20 to 100% 
 
@@ -76,10 +76,17 @@ ReturnFn=@(h,aprime,a,z,sigma,psi,eta,r,w,tau,kappa_j,agej, Jr)...
 % after this is interpreted as a parameter.
 
 %% Solve for value function and policy function
-vfoptions.divideandconquer=1; % Just using the defaults.
+% Use both divide-and-conquer and grid interpolation layer
+vfoptions.divideandconquer=1;
+vfoptions.gridinterplayer=1;
+vfoptions.ngridinterp=20;
 tic;
 [V, Policy]=ValueFnIter_Case1_FHorz_PType(n_d,n_a,n_z,N_j,Names_i, d_grid, a_grid, z_grid, pi_z, ReturnFn, Params, DiscountFactorParamNames, vfoptions);
 toc
+
+% When using grid interpolation layer, have to tell simoptions too
+simoptions.gridinterplayer=vfoptions.gridinterplayer;
+simoptions.ngridinterp=vfoptions.ngridinterp;
 
 %% Agent distribution
 
@@ -96,8 +103,7 @@ AgeWeightParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass
 PTypeDistParamNames={'ptypemass'};
 Params.ptypemass=[0.7,0.3];
 
-% Solve Stationart Distribution
-simoptions=struct(); % Use the default options
+% Solve Stationary Distribution
 StationaryDist=StationaryDist_Case1_FHorz_PType(jequaloneDist,AgeWeightParamNames,PTypeDistParamNames,Policy,n_d,n_a,n_z,N_j,Names_i,pi_z,Params,simoptions);
 
 %% Set up FnsToEvaluate
