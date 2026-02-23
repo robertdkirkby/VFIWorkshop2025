@@ -69,7 +69,7 @@ a_grid=10*linspace(0,1,n_a)'.^3; % Column vector of length n_a
 
 %% ReturnFn
 % Discount factors
-DiscountFactorParamNames={'beta'};
+DiscountFactorParamNames={'beta','sj'};
 
 % ReturnFn
 ReturnFn=@(h,aprime,a,z,sigma,psi,eta,r,w,tau,kappa_j,Beq,agej,Jr)...
@@ -97,8 +97,12 @@ jequaloneDist=zeros([n_a,n_z],'gpuArray'); % Put no households anywhere on grid
 jequaloneDist(1,ceil(n_z/2))=1; % start with 0 assets, median z shock
 
 % Mass of agents of each age
-Params.mewj=ones(N_j,1)/N_j; % equal mass of each age (must some to one)
 AgeWeightParamNames={'mewj'}; % So VFI Toolkit knows which parameter is the mass of agents of each age
+Params.mewj = ones(1,N_j)/N_j;
+for jj = 2:length(Params.mewj)
+    Params.mewj(jj) = Params.sj(jj-1)*Params.mewj(jj-1);
+end
+Params.mewj = Params.mewj./sum(Params.mewj);
 % Note: should set mewj based on sj, but this is just a very simple example
 
 % Solve Stationart Distribution
@@ -217,9 +221,12 @@ PricePath0.Beq=[linspace(p_eqm_init.Beq, p_eqm_final.Beq,ceil(T/2)), p_eqm_final
 GeneralEqmEqns_Transition.capitalmarket=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta); % r=marginal product of capital
 GeneralEqmEqns_Transition.labormarket=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha)); % w=marginal product of labor
 GeneralEqmEqns_Transition.govbudgetbalance=@(taxrevenue,G) taxrevenue-G;
-GeneralEqmEqns_Transition.bequests=@(Beqleft,Beqreceived) Beqleft_tminus1-Beqreceived; % Note: bequests are left in t-1 and received in t
+GeneralEqmEqns_Transition.bequests=@(Beqleft_tminus1,Beqreceived) Beqleft_tminus1-Beqreceived; % Note: bequests are left in t-1 and received in t
 % Note: in this example these are actually identical to the general eqm
 % eqns for the stationary general eqm, but that is not often the case.
+
+% Because we are using Beqleft_tminus1, we need to store the t=0 value
+transpathoptions.initialvalues.Beqleft=p_eqm_init.Beq*sum(Params.mewj(1:Params.Jr-1));
 
 % Set up the shooting algorithm
 transpathoptions.GEnewprice=3;
@@ -243,7 +250,7 @@ transpathoptions.fastOLG=1;
 transpathoptions.graphpricepath=1; % plots of the ParamPath that get updated every interation
 % transpathoptions.graphaggvarspath=1; % plots of the AggVarsPath that get updated every iteration
 % And go!
-[PricePath,GECondnsPath]=TransitionPath_Case1_FHorz(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, transpathoptions, simoptions, vfoptions);
+[PricePath,GECondnsPath]=TransitionPath_Case1_FHorz(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns_Transition, Params, DiscountFactorParamNames, AgeWeightParamNames, transpathoptions, simoptions, vfoptions);
 
 %% Now calculate some things about the transition path (path for Value fn, Policy fn, Agent Distribution)
 % You can calculate the value and policy functions for the transition path
