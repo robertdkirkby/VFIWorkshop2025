@@ -234,10 +234,10 @@ PricePath0.Beq=[linspace(p_eqm_init.Beq, p_eqm_final.Beq,ceil(T/2)), p_eqm_final
 % Just some reasonable guesses I made up.
 
 % General eqm eqns, same idea as with the stationary general eqm
-GeneralEqmEqns_Transition.capitalmarket_x=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta); % r=marginal product of capital
-GeneralEqmEqns_Transition.labormarket_x=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha)); % w=marginal product of labor
-GeneralEqmEqns_Transition.govbudgetbalance_x=@(taxrevenue,G) taxrevenue-G;
-GeneralEqmEqns_Transition.bequests_x=@(Beqleft_tminus1,Beqreceived) Beqleft_tminus1-Beqreceived; % Note: bequests are left in t-1 and received in t
+GeneralEqmEqns_Transition.capitalmarket=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta); % r=marginal product of capital
+GeneralEqmEqns_Transition.labormarket=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha)); % w=marginal product of labor
+GeneralEqmEqns_Transition.govbudgetbalance=@(taxrevenue,G) taxrevenue-G;
+GeneralEqmEqns_Transition.bequests=@(Beqleft_tminus1,Beqreceived) Beqleft_tminus1-Beqreceived; % Note: bequests are left in t-1 and received in t
 % Note: in this example these are actually identical to the general eqm
 % eqns for the stationary general eqm, but that is not often the case.
 
