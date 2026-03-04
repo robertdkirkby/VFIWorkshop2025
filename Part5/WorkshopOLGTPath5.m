@@ -7,7 +7,7 @@
 %% Setup for sj and mewj transitions
 T=100;
 N_j=81; % periods, represent ages 20 to 100% 
-% 40 years of chaning demographics
+% 40 years of changing demographics
 % 60 years in final demographic state (to allow time to converge to final stationary general eqm)
 % Conditional survival probabilities
 Params.sj_init=[ones(1,46),linspace(1,0.99,81-46-10),linspace(0.99,0.9,9),0];
@@ -27,7 +27,7 @@ ParamPath.mewj=ParamPath.mewj./sum(ParamPath.mewj,2); % normalize age-masses to 
 % Note: This is rather incomplete, as really you should also have
 % population growth rate n. But this does not change any thing in terms of
 % the 'objects to compute'. Instead you need to renormalize the model for
-% the population growth, and this just means you get a 'n' appearing ins
+% the population growth, and this just means you get a 'n' appearing in
 % some equations below. But other than 'n' in some equations, the way you
 % do this with the toolkit does not change.
 
@@ -234,21 +234,26 @@ PricePath0.Beq=[linspace(p_eqm_init.Beq, p_eqm_final.Beq,ceil(T/2)), p_eqm_final
 % Just some reasonable guesses I made up.
 
 % General eqm eqns, same idea as with the stationary general eqm
-GeneralEqmEqns_Transition.capitalmarket=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta); % r=marginal product of capital
-GeneralEqmEqns_Transition.labormarket=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha)); % w=marginal product of labor
-GeneralEqmEqns_Transition.govbudgetbalance=@(taxrevenue,G) taxrevenue-G;
-GeneralEqmEqns_Transition.bequests=@(Beqleft,Beqreceived) Beqleft_tminus1-Beqreceived; % Note: bequests are left in t-1 and received in t
+GeneralEqmEqns_Transition.capitalmarket_x=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta); % r=marginal product of capital
+GeneralEqmEqns_Transition.labormarket_x=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha)); % w=marginal product of labor
+GeneralEqmEqns_Transition.govbudgetbalance_x=@(taxrevenue,G) taxrevenue-G;
+GeneralEqmEqns_Transition.bequests_x=@(Beqleft_tminus1,Beqreceived) Beqleft_tminus1-Beqreceived; % Note: bequests are left in t-1 and received in t
 % Note: in this example these are actually identical to the general eqm
 % eqns for the stationary general eqm, but that is not often the case.
+
+% VFI Toolkit understands '_tminus1' to mean the value from the previous period.
+
+% To use a '_tminus1' variable we must include its initial value
+transpathoptions.initialvalues.Beqleft=p_eqm_init.Beq;
 
 % Set up the shooting algorithm
 transpathoptions.GEnewprice=3;
 % Need to explain to transpathoptions how to use the GeneralEqmEqns to update the general eqm transition prices (in PricePath).
 transpathoptions.GEnewprice3.howtoupdate=... % a row is: GEcondn, price, add, factor
-    {'capitalmarket','r',0,0.3;...  % labormarket GE condition will be positive if r is too big, so subtract
-    'labormarket','w',0,0.3;... % captialmarket GE condition will be positive if r is too big, so subtract
-    'govbudgetbalance','G',1,0.5;... % govbudgetbalance GE condition will be negative if G is too big, so add
-    'bequests','Beq',1,0.5;... % bequests GE condition will be negative if Beq is too big, so add
+    {'capitalmarket_x','r',0,0.3;...  % captialmarket GE condition will be positive if r is too big, so subtract
+    'labormarket_x','w',0,0.3;... % labormarket GE condition will be positive if r is too big, so subtract
+    'govbudgetbalance_x','G',1,0.5;... % govbudgetbalance GE condition will be negative if G is too big, so add
+    'bequests_x','Beq',1,0.5;... % bequests GE condition will be negative if Beq is too big, so add
     };
 % Note: the update is essentially new_price=price+factor*add*GEcondn_value-factor*(1-add)*GEcondn_value
 % Notice that this adds factor*GEcondn_value when add=1 and subtracts it what add=0
@@ -267,7 +272,7 @@ transpathoptions.graphpricepath=1; % plots of the ParamPath that get updated eve
 transpathoptions.tolerance=4*10^(-4); % default is 10^(-4), which is a very demanding accuracy
 
 % And go!
-[PricePath,GECondnsPath]=TransitionPath_Case1_FHorz(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns, Params, DiscountFactorParamNames, AgeWeightParamNames, transpathoptions, simoptions, vfoptions);
+[PricePath,GECondnsPath]=TransitionPath_Case1_FHorz(PricePath0, ParamPath, T, V_final, AgentDist_init, jequaloneDist, n_d, n_a, n_z, N_j, d_grid,a_grid,z_grid, pi_z, ReturnFn, FnsToEvaluate, GeneralEqmEqns_Transition, Params, DiscountFactorParamNames, AgeWeightParamNames, transpathoptions, simoptions, vfoptions);
 
 %% Now calculate some things about the transition path (path for Value fn, Policy fn, Agent Distribution)
 % You can calculate the value and policy functions for the transition path
