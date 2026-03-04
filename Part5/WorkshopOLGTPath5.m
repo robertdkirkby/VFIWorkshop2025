@@ -92,7 +92,7 @@ a_grid=10*linspace(0,1,n_a)'.^3; % Column vector of length n_a
 
 %% ReturnFn
 % Discount factors
-DiscountFactorParamNames={'beta'};
+DiscountFactorParamNames={'beta','sj'};
 
 % ReturnFn
 ReturnFn=@(h,aprime,a,z,sigma,psi,eta,r,w,tau,kappa_j,Beq,agej,Jr)...
