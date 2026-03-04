@@ -250,10 +250,10 @@ transpathoptions.initialvalues.Beqleft=p_eqm_init.Beq;
 transpathoptions.GEnewprice=3;
 % Need to explain to transpathoptions how to use the GeneralEqmEqns to update the general eqm transition prices (in PricePath).
 transpathoptions.GEnewprice3.howtoupdate=... % a row is: GEcondn, price, add, factor
-    {'capitalmarket_x','r',0,0.3;...  % captialmarket GE condition will be positive if r is too big, so subtract
-    'labormarket_x','w',0,0.3;... % labormarket GE condition will be positive if r is too big, so subtract
-    'govbudgetbalance_x','G',1,0.5;... % govbudgetbalance GE condition will be negative if G is too big, so add
-    'bequests_x','Beq',1,0.5;... % bequests GE condition will be negative if Beq is too big, so add
+    {'capitalmarket','r',0,0.3;...  % captialmarket GE condition will be positive if r is too big, so subtract
+    'labormarket','w',0,0.3;... % labormarket GE condition will be positive if r is too big, so subtract
+    'govbudgetbalance','G',1,0.5;... % govbudgetbalance GE condition will be negative if G is too big, so add
+    'bequests','Beq',1,0.5;... % bequests GE condition will be negative if Beq is too big, so add
     };
 % Note: the update is essentially new_price=price+factor*add*GEcondn_value-factor*(1-add)*GEcondn_value
 % Notice that this adds factor*GEcondn_value when add=1 and subtracts it what add=0
