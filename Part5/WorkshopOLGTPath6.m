@@ -9,7 +9,7 @@ tau_final=0.05;
 
 %% Model action and state-space
 n_d=51; % number of grid points for our decision variable, labor supply
-n_a=301; % number of grid points for our endogenous state, assets
+n_a=201; % number of grid points for our endogenous state, assets
 n_z=9; % number of grid points for our exogenous markov state, labor productivity (per time worked; roughly hourly labor productivity)
 N_j=81; % periods, represent ages 20 to 100% 
 
@@ -124,7 +124,7 @@ FnsToEvaluate2.earnings=@(h,aprime,a,z,w,kappa_j) w*kappa_j*h*exp(z); % w*kappa_
 
 %% General Eqm
 GEPriceParamNames={'r','w','G'};
-% note, Params.r we set earlier was an inital guess
+% note, Params.r we set earlier was an initial guess
 
 GeneralEqmEqns.capitalmarket=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta); % r=marginal product of capital
 GeneralEqmEqns.labormarket=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha)); % w=marginal product of labor
@@ -244,7 +244,7 @@ transpathoptions.graphpricepath=1; % plots of the ParamPath that get updated eve
 [VPath,PolicyPath]=ValueFnOnTransPath_Case1_FHorz_PType(PricePath, ParamPath, T, V_final, Policy_final, Params, n_d, n_a, n_z, N_j, Names_i, d_grid, a_grid,z_grid, pi_z, DiscountFactorParamNames, ReturnFn, transpathoptions, vfoptions);
 
 % You can then use these to calculate the agent distribution for the transition path
-AgentDistPath=AgentDistOnTransPath_Case1_FHorz_PType(StationaryDist_init, jequaloneDist, PricePath, ParamPath, PolicyPath, AgeWeightParamNames,n_d,n_a,n_z,N_j,Names_i,pi_z,T, Params, transpathoptions, simoptions);
+AgentDistPath=AgentDistOnTransPath_Case1_FHorz_PType(StationaryDist_init, jequaloneDist, PricePath, ParamPath, PolicyPath, AgeWeightParamNames, PTypeDistParamNames,n_d,n_a,n_z,N_j,Names_i,pi_z,T, Params, transpathoptions, simoptions);
 
 %% Analyse the transition path
 % And then we can calculate AggVars for the path

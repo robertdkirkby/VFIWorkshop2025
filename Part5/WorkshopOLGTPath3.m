@@ -121,7 +121,7 @@ FnsToEvaluate2.earnings=@(h,aprime,a,z,w,kappa_j) w*kappa_j*h*exp(z); % w*kappa_
 
 %% General Eqm
 GEPriceParamNames={'r','w','G'};
-% note, Params.r we set earlier was an inital guess
+% note, Params.r we set earlier was an initial guess
 
 GeneralEqmEqns.capitalmarket=@(r,alpha,delta,K,L) r-(alpha*(K^(alpha-1))*(L^(1-alpha))-delta); % r=marginal product of capital
 GeneralEqmEqns.labormarket=@(w,alpha,K,L) w-(1-alpha)*(K^alpha)*(L^(-alpha)); % w=marginal product of labor
